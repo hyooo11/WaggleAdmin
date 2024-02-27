@@ -1,8 +1,11 @@
 "use client";
 import { SiPhpmyadmin } from "react-icons/si";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const SideBar = () => {
+  const pathname = usePathname();
+  if (pathname.includes("login")) return null;
   return (
     <div className="gloval-nav">
       <div className="nav_header">
