@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SideBar from "@/component/common/SideBar";
-import GlovalTop from "@/component/common/GlovalTop";
 
 const inter = Inter({ subsets: ["latin"] });
 
