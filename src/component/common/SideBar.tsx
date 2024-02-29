@@ -2,9 +2,55 @@
 import { SiPhpmyadmin } from "react-icons/si";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+import { useAppDispatch } from "@/redux/hook";
+import {
+  loginCheck,
+  setAccessToken,
+  clearUser,
+} from "@/redux/features/userSlice";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
+  const router = useRouter();
+
+  const userPid = getCookie("pid");
+  const refreshToken = getCookie("refreshToken");
+
+  useEffect(() => {
+    const reissueToken = async () => {
+      if (userPid && refreshToken) {
+        await axios
+          .post("/api/auth/refresh", {
+            pid: userPid,
+            refreshToken: refreshToken,
+          })
+          .then((response) => {
+            const newReissueToken = response.data.data.reissueToken;
+            dispatch(loginCheck(newReissueToken));
+            dispatch(setAccessToken({ newToken: newReissueToken }));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        console.log("리프레시 토큰 없음");
+      }
+    };
+    reissueToken();
+  }, []);
+
+  //로그아웃
+  const logoutBtn = () => {
+    dispatch(clearUser());
+    router.push("/");
+    router.replace("/");
+  };
+
   if (pathname.includes("login")) return null;
   return (
     <div className="gloval-nav">
@@ -33,6 +79,9 @@ const SideBar = () => {
           <Link href="/admin/member">회원 관리</Link>
         </li>
       </ul>
+      <div>
+        <button onClick={logoutBtn}>로그아웃</button>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import build from "next/dist/build";
+import { setCookie, deleteCookie } from "cookies-next";
 
 interface userState {
   isLoading: boolean;
@@ -14,7 +13,7 @@ interface userState {
     message: string;
     token: string;
     refreshToken: string;
-    memberInfo: null | string[];
+    memberInfo: object[] | null;
   };
 }
 
@@ -50,7 +49,7 @@ export const loginHadler = createAsyncThunk(
           },
         }
       );
-      return console.log(response.data);
+      return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue({
@@ -65,12 +64,53 @@ export const loginHadler = createAsyncThunk(
   }
 );
 // 로그인 확인
+export const loginCheck = createAsyncThunk(
+  "auth/login_check",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/auth/login-check", {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue({
+          data: error.response.data,
+          status: error.response.status,
+          statusText: error.response.statusText,
+        });
+      } else {
+        throw new Error("에러가 발생했습니다.");
+      }
+    }
+  }
+);
+
+//토큰 웹스토리지 저장 함수
+export const setToken = (pid: string, refreshToken: string) => {
+  setCookie("pid", pid);
+  setCookie("refreshToken", refreshToken);
+};
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    clearUser() {},
+    clearUser(state) {
+      state.isLogin = false;
+      state.data.memberInfo = null;
+      deleteCookie("pid");
+      deleteCookie("refreshToken");
+    },
+    //엑세스 토큰 재발급시(SideBar.js)
+    setAccessToken(state, action) {
+      if (action.payload.newToken) {
+        state.data.token = action.payload.newToken;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -80,9 +120,27 @@ const userSlice = createSlice({
         state.isLoginError = false;
       })
       .addCase(loginHadler.fulfilled, (state, action) => {
-        state.isLoading = true;
-        state.isLogin = false;
+        state.isLoading = false;
         state.isLoginError = false;
+        if (action.payload.data.message === "success") {
+          if (action.payload.data.memberInfo.role === "ROLE_ADMIN") {
+            state.isLogin = true;
+            state.data.memberInfo = action.payload.data.memberInfo;
+            setToken(
+              action.payload.data.memberInfo.pid,
+              action.payload.data.refreshToken
+            );
+          } else if (action.payload.data.memberInfo.role === "ROLE_USER") {
+            state.isLogin = false;
+            state.data.memberInfo = null;
+          }
+        } else if (action.payload.data.message === "expired token") {
+          state.isLogin = false;
+          state.data.memberInfo = null;
+        } else if (action.payload.data.message === "does not login") {
+          state.isLogin = false;
+          state.data.memberInfo = null;
+        }
       })
       .addCase(loginHadler.rejected, (state, action) => {
         state.isLoading = false;
@@ -92,5 +150,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearUser } = userSlice.actions;
+export const { clearUser, setAccessToken } = userSlice.actions;
 export default userSlice;

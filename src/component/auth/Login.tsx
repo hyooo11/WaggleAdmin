@@ -1,11 +1,14 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { useRouter } from "next/navigation";
 import { loginHadler } from "@/redux/features/userSlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Login = () => {
   const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.user);
+  const router = useRouter();
 
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -15,9 +18,16 @@ const Login = () => {
     password: password,
   };
 
-  const loginSubmit = () => {
+  const onSubmit = () => {
     dispatch(loginHadler(LoginData));
   };
+
+  useEffect(() => {
+    if (userState.isLogin === true) {
+      router.push("/");
+      router.replace("/");
+    }
+  }, [userState, router]);
 
   return (
     <div className="Login">
@@ -28,6 +38,7 @@ const Login = () => {
             onChange={(e) => {
               setId(e.target.value);
             }}
+            className="form-control"
           />
         </div>
         <div>
@@ -36,12 +47,13 @@ const Login = () => {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            className="form-control"
           />
         </div>
-        <button type="submit" onClick={loginSubmit}>
-          로그인
-        </button>
       </div>
+      <button type="submit" onClick={onSubmit}>
+        로그인
+      </button>
     </div>
   );
 };
