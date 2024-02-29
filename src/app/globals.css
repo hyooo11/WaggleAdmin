@@ -340,6 +340,22 @@ button {
   padding: 30px;
 }
 
+/*form*/
+.form-control {
+  display: block;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  padding: 0.3rem 0.3rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 /* 대시보드 */
 .Admin .tit {
   font-size: 17px;
@@ -374,5 +390,30 @@ button {
   border-radius: 60px 0px;
   background: rgba(102, 102, 102, 0.6);
 }
-.Login {
+.Login .input_box .desc {
+  color: #fff;
+  font-size: 1.2rem;
+  padding-bottom: 2rem;
+}
+.Login .input_box > div {
+  width: 400px;
+  margin-bottom: 5px;
+}
+.Login .input_box > div input {
+  height: 50px;
+  padding: 0.25rem 0.5rem;
+}
+
+.Login .btn_login {
+  width: 400px;
+  height: 70px;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.05em;
+  text-align: center;
+  color: #fff;
+  margin-top: 1em;
 }
