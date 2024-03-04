@@ -147,6 +147,18 @@ const userSlice = createSlice({
         state.isLogin = false;
         state.isLoginError = true;
       });
+    builder.addCase(loginCheck.fulfilled, (state, action) => {
+      if (action.payload.data.message === "success") {
+        state.isLogin = true;
+        state.data.memberInfo = action.payload.data.memberInfo;
+      } else if (action.payload.data.message === "expired token") {
+        state.isLogin = false;
+        state.data.memberInfo = null;
+      } else if (action.payload.data.message === "does not login") {
+        state.isLogin = false;
+        state.data.memberInfo = null;
+      }
+    });
   },
 });
 
