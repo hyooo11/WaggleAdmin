@@ -2,6 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setCookie, deleteCookie } from "cookies-next";
 
+type MemberInfoType = {
+  pid: number;
+  id: string;
+  password: string;
+  name: string;
+  nickName: string;
+  email: string;
+  address: string;
+  phone: string;
+  regiDate: string;
+  role: string;
+  refreshToken: string;
+};
+
 interface userState {
   isLoading: boolean;
   isLogin: boolean;
@@ -13,7 +27,7 @@ interface userState {
     message: string;
     token: string;
     refreshToken: string;
-    memberInfo: object[] | null;
+    memberInfo: MemberInfoType | null;
   };
 }
 

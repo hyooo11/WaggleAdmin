@@ -204,7 +204,7 @@ button {
   z-index: -1;
 }
 .gloval-twotone > .__top {
-  flex: 0 0 300px;
+  flex: 0 0 360px;
   background: #333;
 }
 .gloval-twotone > .__bottom {
@@ -224,7 +224,7 @@ button {
 }
 .gloval-nav .nav_header {
   position: relative;
-  height: 300px;
+  height: 360px;
   text-align: center;
   z-index: 10;
 }
@@ -270,14 +270,45 @@ button {
 .nav_header .user_txt .__name {
   display: inline-block;
   font-size: 1.24em;
+  padding-right: 3px;
 }
-.nav_header .user_txt .__belong {
-  opacity: 0.7;
+.nav_header .button_area {
+  margin-top: 2rem;
+  color: #ddd;
+  display: flex;
+}
+.nav_header .button_area .link_box {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+}
+.nav_header .button_area .link_box .icon {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 50rem;
+  margin-bottom: 5px;
+}
+.nav_header .button_area .link_box .icon svg {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #333;
+}
+.nav_header .button_area .link_box .txt {
+  font-size: 0.7rem;
 }
 .gloval-nav .nav_body {
   position: relative;
   width: 98%;
-  height: calc(100% - 340px);
+  height: calc(100% - 360px);
   padding: 10px 25px;
   text-align: left;
   color: #656565;
@@ -286,6 +317,9 @@ button {
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
+}
+.gloval-nav .nav_body li {
+  padding: 5px 0;
 }
 
 .gloval-content-wrap {

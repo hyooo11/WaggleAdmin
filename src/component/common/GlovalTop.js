@@ -1,10 +1,10 @@
 import { SiGmail } from "react-icons/si";
 import { FaPhone } from "react-icons/fa6";
 
-const GlovalTop = () => {
+const GlovalTop = ({ pagename }) => {
   return (
     <div className="gloval-content-top">
-      <h2 className="_page_name">대시보드</h2>
+      <h2 className="_page_name">{pagename}</h2>
       <div className="contact__">
         <p className="cont">
           <span className="icon">
