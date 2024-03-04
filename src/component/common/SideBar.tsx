@@ -47,7 +47,7 @@ const SideBar = () => {
       }
     };
     reissueToken();
-  }, []);
+  }, [userPid, refreshToken, dispatch]);
 
   //로그아웃
   const logoutBtn = () => {
@@ -61,7 +61,7 @@ const SideBar = () => {
     <div className="gloval-nav">
       <div className="nav_header">
         <h1>
-          <Link href="/admin">
+          <Link href="/">
             <SiPhpmyadmin />
             <span>Admin</span>
           </Link>
@@ -96,7 +96,10 @@ const SideBar = () => {
       </div>
       <ul className="nav_body">
         <li>
-          <Link href="/productlist">상품 관리</Link>
+          <Link href="/productlist">상품 리스트</Link>
+        </li>
+        <li>
+          <Link href="/registerproduct">상품 등록</Link>
         </li>
         <li>
           <Link href="/memberlist">회원 관리</Link>
